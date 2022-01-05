@@ -1,6 +1,6 @@
 package com.gufli.brickessentials;
 
-import com.gufli.brickessentials.commands.GamemodeCommand;
+import com.gufli.brickessentials.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.Command;
@@ -23,6 +23,11 @@ public class BrickEssentials extends Extension {
 
         // register commands
         commands.add(new GamemodeCommand());
+        commands.add(new TeleportCommand());
+        commands.add(new TeleportHereCommand());
+        commands.add(new RepairCommand());
+        commands.add(new KillCommand());
+        commands.add(new KickCommand());
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commands.forEach(commandManager::register);
@@ -32,6 +37,7 @@ public class BrickEssentials extends Extension {
 
     @Override
     public void terminate() {
+        System.out.println("terminate");
 
         // unregister commands
         CommandManager commandManager = MinecraftServer.getCommandManager();

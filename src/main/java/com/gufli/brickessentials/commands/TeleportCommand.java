@@ -1,0 +1,55 @@
+package com.gufli.brickessentials.commands;
+
+import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.ConsoleSender;
+import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.Player;
+
+import java.util.Arrays;
+import java.util.Optional;
+
+public class TeleportCommand extends Command {
+
+    public TeleportCommand() {
+        super("teleport", "tp");
+
+        // conditions
+        setCondition(((sender, commandString) -> sender instanceof Player &&
+                sender.hasPermission("brickessentials.teleport")));
+
+        // usage
+        setDefaultExecutor((sender, context) -> {
+            sender.sendMessage("Usage: /teleport <player>");
+        });
+
+        // arguments
+        ArgumentWord player = ArgumentType.Word("player");
+
+        // executor
+        addSyntax(this::execute, player);
+    }
+
+    private void execute(CommandSender sender, CommandContext context) {
+        Player player = (Player) sender;
+        String targetName = context.get("player");
+
+        Optional<Player> target = MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
+                .filter(p -> p.getUsername().equalsIgnoreCase(targetName)).findFirst();
+
+        if (target.isEmpty()) {
+            sender.sendMessage(Component.text(targetName + " is not online.")); // TODO
+            return;
+        }
+
+        player.teleport(target.get().getPosition());
+        sender.sendMessage(Component.text("Teleported to " + target.get().getUsername() + ".")); // TODO
+    }
+
+}

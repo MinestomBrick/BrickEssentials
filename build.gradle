@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.Minestom:Minestom:-SNAPSHOT'
+    compileOnly 'com.github.Minestom:Minestom:1.18-SNAPSHOT'
 }
 
 shadowJar {

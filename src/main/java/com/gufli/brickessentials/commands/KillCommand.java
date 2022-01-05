@@ -12,56 +12,44 @@ import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 
-import java.util.Arrays;
 import java.util.Optional;
 
-public class GamemodeCommand extends Command {
+public class KillCommand extends Command {
 
-    public GamemodeCommand() {
-        super("gamemode");
+    public KillCommand() {
+        super("kill");
 
         // conditions
         CommandCondition selfcondition = (sender, cs) -> sender instanceof Player &&
-                sender.hasPermission("brickessentials.gamemode");
+                sender.hasPermission("brickessentials.kill");
         CommandCondition othercondition = (sender, cs) -> sender instanceof ConsoleSender ||
-                sender.hasPermission("brickessentials.gamemode.other");
+                sender.hasPermission("brickessentials.kill.other");
         setCondition(((sender, cs) -> selfcondition.canUse(sender, cs)
                 || othercondition.canUse(sender, cs)));
 
         // usage
         setDefaultExecutor((sender, context) -> {
-            sender.sendMessage("Usage: /gamemode [player] <gamemode>");
+            sender.sendMessage("Usage: /kill <player>");
         });
 
         // arguments
         ArgumentWord player = ArgumentType.Word("player");
-        ArgumentWord mode = ArgumentType.Word("mode")
-                .from(Arrays.stream(GameMode.values()).map(gm -> gm.name().toLowerCase()).toArray(String[]::new));
-
-        // invalid gamemode
-        setArgumentCallback(((sender, exception) -> {
-            sender.sendMessage(exception.getInput() + " is not a valid gamemode!");
-        }), mode);
 
         // self
-        addConditionalSyntax(selfcondition, this::executeOnSelf, mode);
+        addConditionalSyntax(selfcondition, this::executeOnSelf);
 
         // other
-        addConditionalSyntax(othercondition, this::executeOnOther, player, mode);
+        addConditionalSyntax(othercondition, this::executeOnOther, player);
     }
 
     private void executeOnSelf(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
-        String gamemodeName = context.get("mode");
-        GameMode mode = GameMode.valueOf(gamemodeName.toUpperCase());
-        player.setGameMode(mode);
-        player.sendMessage(Component.text("Your gamemode has been changed to " + gamemodeName + ".")); // TODO
+        player.kill();
+        player.sendMessage(Component.text("You killed yourself.")); // TODO
     }
 
     private void executeOnOther(CommandSender sender, CommandContext context) {
-        String gamemodeName = context.get("mode");
         String targetName = context.get("player");
-        GameMode mode = GameMode.valueOf(gamemodeName.toUpperCase());
 
         Optional<Player> target = MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
                 .filter(p -> p.getUsername().equalsIgnoreCase(targetName)).findFirst();
@@ -71,8 +59,8 @@ public class GamemodeCommand extends Command {
             return;
         }
 
-        target.get().setGameMode(mode);
-        sender.sendMessage(Component.text("You changed the gamemode of " + target.get().getUsername() + " to " + gamemodeName + ".")); // TODO
+        target.get().kill();
+        sender.sendMessage(Component.text("You killed " + target.get().getUsername() + ".")); // TODO
     }
 
 }
