@@ -8,7 +8,9 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.Optional;
 
@@ -27,7 +29,11 @@ public class TeleportHereCommand extends Command {
         });
 
         // arguments
-        ArgumentWord player = ArgumentType.Word("player");
+        ArgumentEntity player = ArgumentType.Entity("player").onlyPlayers(true);
+
+        setArgumentCallback((sender, exception) -> {
+            sender.sendMessage(Component.text(exception.getInput() + " is not online.")); // TODO
+        }, player);
 
         // executor
         addSyntax(this::execute, player);
@@ -35,19 +41,14 @@ public class TeleportHereCommand extends Command {
 
     private void execute(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
-        String targetName = context.get("player");
-
-        Optional<Player> target = MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
-                .filter(p -> p.getUsername().equalsIgnoreCase(targetName)).findFirst();
-
-        if (target.isEmpty()) {
-            sender.sendMessage(Component.text(targetName + " is not online.")); // TODO
+        Player target = ((EntityFinder) context.get("player")).findFirstPlayer(sender);
+        if ( target == null ) {
             return;
         }
 
-        target.get().teleport(player.getPosition());
-        sender.sendMessage(Component.text("Teleported " + target.get().getUsername() + " to you.")); // TODO
-        target.get().sendMessage("You have been teleported to " + player.getUsername() + ".");
+        target.teleport(player.getPosition());
+        sender.sendMessage(Component.text("Teleported " + target.getUsername() + " to you.")); // TODO
+        target.sendMessage("You have been teleported to " + player.getUsername() + ".");
     }
 
 }

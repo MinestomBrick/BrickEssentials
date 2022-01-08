@@ -8,9 +8,11 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -34,14 +36,20 @@ public class GamemodeCommand extends Command {
         });
 
         // arguments
-        ArgumentWord player = ArgumentType.Word("player");
+        ArgumentEntity player = ArgumentType.Entity("player")
+                .onlyPlayers(true).singleEntity(true);
+
         ArgumentWord mode = ArgumentType.Word("mode")
                 .from(Arrays.stream(GameMode.values()).map(gm -> gm.name().toLowerCase()).toArray(String[]::new));
 
         // invalid gamemode
-        setArgumentCallback(((sender, exception) -> {
+        setArgumentCallback((sender, exception) -> {
             sender.sendMessage(exception.getInput() + " is not a valid gamemode!");
-        }), mode);
+        }, mode);
+
+        setArgumentCallback((sender, exception) -> {
+            sender.sendMessage(Component.text(exception.getInput() + " is not online.")); // TODO
+        }, player);
 
         // self
         addConditionalSyntax(selfcondition, this::executeOnSelf, mode);
@@ -59,20 +67,16 @@ public class GamemodeCommand extends Command {
     }
 
     private void executeOnOther(CommandSender sender, CommandContext context) {
-        String gamemodeName = context.get("mode");
-        String targetName = context.get("player");
-        GameMode mode = GameMode.valueOf(gamemodeName.toUpperCase());
-
-        Optional<Player> target = MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
-                .filter(p -> p.getUsername().equalsIgnoreCase(targetName)).findFirst();
-
-        if (target.isEmpty()) {
-            sender.sendMessage(Component.text(targetName + " is not online.")); // TODO
+        Player target = ((EntityFinder) context.get("player")).findFirstPlayer(sender);
+        if ( target == null ) {
             return;
         }
 
-        target.get().setGameMode(mode);
-        sender.sendMessage(Component.text("You changed the gamemode of " + target.get().getUsername() + " to " + gamemodeName + ".")); // TODO
+        GameMode mode = GameMode.valueOf(context.getRaw("mode").toUpperCase());
+
+
+        target.setGameMode(mode);
+        sender.sendMessage(Component.text("You changed the gamemode of " + target.getUsername() + " to " + mode.name() + ".")); // TODO
     }
 
 }

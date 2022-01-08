@@ -8,9 +8,11 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.Optional;
 
@@ -33,7 +35,11 @@ public class KillCommand extends Command {
         });
 
         // arguments
-        ArgumentWord player = ArgumentType.Word("player");
+        ArgumentEntity player = ArgumentType.Entity("player").onlyPlayers(true);
+
+        setArgumentCallback((sender, exception) -> {
+            sender.sendMessage(Component.text(exception.getInput() + " is not online.")); // TODO
+        }, player);
 
         // self
         addConditionalSyntax(selfcondition, this::executeOnSelf);
@@ -49,18 +55,13 @@ public class KillCommand extends Command {
     }
 
     private void executeOnOther(CommandSender sender, CommandContext context) {
-        String targetName = context.get("player");
-
-        Optional<Player> target = MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
-                .filter(p -> p.getUsername().equalsIgnoreCase(targetName)).findFirst();
-
-        if (target.isEmpty()) {
-            sender.sendMessage(Component.text(targetName + " is not online.")); // TODO
+        Player target = ((EntityFinder) context.get("player")).findFirstPlayer(sender);
+        if ( target == null ) {
             return;
         }
 
-        target.get().kill();
-        sender.sendMessage(Component.text("You killed " + target.get().getUsername() + ".")); // TODO
+        target.kill();
+        sender.sendMessage(Component.text("You killed " + target.getUsername() + ".")); // TODO
     }
 
 }

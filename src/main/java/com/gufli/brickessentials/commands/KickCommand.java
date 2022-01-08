@@ -1,17 +1,15 @@
 package com.gufli.brickessentials.commands;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Player;
-
-import java.util.Optional;
+import net.minestom.server.utils.entity.EntityFinder;
 
 public class KickCommand extends Command {
 
@@ -28,30 +26,28 @@ public class KickCommand extends Command {
         });
 
         // arguments
-        ArgumentWord player = ArgumentType.Word("player");
+        ArgumentEntity player = ArgumentType.Entity("player").onlyPlayers(true);
         ArgumentWord message = ArgumentType.Word("message");
         message.setDefaultValue("");
+
+        setArgumentCallback((sender, exception) -> {
+            sender.sendMessage(Component.text(exception.getInput() + " is not online.")); // TODO
+        }, player);
 
         // executor
         addSyntax(this::execute, player, message);
     }
 
     private void execute(CommandSender sender, CommandContext context) {
-        Player player = (Player) sender;
-
-        String targetName = context.get("player");
-        Optional<Player> target = MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
-                .filter(p -> p.getUsername().equalsIgnoreCase(targetName)).findFirst();
-
-        if (target.isEmpty()) {
-            sender.sendMessage(Component.text(targetName + " is not online.")); // TODO
+        Player target = ((EntityFinder) context.get("player")).findFirstPlayer(sender);
+        if ( target == null ) {
             return;
         }
 
         String message = context.get("message");
-        player.kick(Component.text(message));
+        target.kick(Component.text(message));
 
-        sender.sendMessage(Component.text("You kicked " + target.get().getUsername() + " from the server.")); // TODO
+        sender.sendMessage(Component.text("You kicked " + target.getUsername() + " from the server.")); // TODO
     }
 
 }
