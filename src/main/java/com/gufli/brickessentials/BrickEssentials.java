@@ -37,8 +37,6 @@ public class BrickEssentials extends Extension {
 
     @Override
     public void terminate() {
-        System.out.println("terminate");
-
         // unregister commands
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commands.forEach(commandManager::unregister);
