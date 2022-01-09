@@ -20,8 +20,10 @@ public class TeleportHereCommand extends Command {
         super("teleporthere", "tphere");
 
         // conditions
-        setCondition((sender, commandString) -> sender instanceof Player &&
-                sender.hasPermission("brickessentials.teleport"));
+        setCondition((sender, commandString) -> sender instanceof Player p && (
+                p.hasPermission("brickessentials.teleport") ||
+                p.getPermissionLevel() == 4
+        ));
 
         // usage
         setDefaultExecutor((sender, context) -> {

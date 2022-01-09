@@ -1,17 +1,11 @@
 package com.gufli.brickessentials.commands;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
-import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemStack;
-
-import java.util.Optional;
 
 public class RepairCommand extends Command {
 
@@ -19,12 +13,14 @@ public class RepairCommand extends Command {
         super("repair");
 
         // condition
-        setCondition((sender, commandString) -> sender instanceof Player &&
-                sender.hasPermission("brickessentials.repair"));
+        setCondition((sender, commandString) -> sender instanceof Player p && (
+                        p.hasPermission("brickessentials.repair") ||
+                        p.getPermissionLevel() == 4
+                )
+        );
 
         // usage
         setDefaultExecutor(this::execute);
-
     }
 
     private void execute(CommandSender sender, CommandContext context) {

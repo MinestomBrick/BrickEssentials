@@ -18,7 +18,8 @@ public class KickCommand extends Command {
 
         // conditions
         setCondition((sender, commandString) -> sender instanceof ConsoleSender ||
-                sender.hasPermission("brickessentials.kick"));
+                sender.hasPermission("brickessentials.kick") ||
+                (sender instanceof Player p && p.getPermissionLevel() == 4));
 
         // usage
         setDefaultExecutor((sender, context) -> {

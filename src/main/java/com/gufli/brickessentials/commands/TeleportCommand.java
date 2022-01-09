@@ -1,21 +1,13 @@
 package com.gufli.brickessentials.commands;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.entity.EntityFinder;
-
-import java.util.Arrays;
-import java.util.Optional;
 
 public class TeleportCommand extends Command {
 
@@ -23,8 +15,10 @@ public class TeleportCommand extends Command {
         super("teleport", "tp");
 
         // conditions
-        setCondition(((sender, commandString) -> sender instanceof Player &&
-                sender.hasPermission("brickessentials.teleport")));
+        setCondition((sender, commandString) -> sender instanceof Player p && (
+                p.hasPermission("brickessentials.teleport") ||
+                p.getPermissionLevel() == 4
+        ));
 
         // usage
         setDefaultExecutor((sender, context) -> {
@@ -45,7 +39,7 @@ public class TeleportCommand extends Command {
     private void execute(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         Player target = ((EntityFinder) context.get("player")).findFirstPlayer(sender);
-        if ( target == null ) {
+        if (target == null) {
             return;
         }
 
