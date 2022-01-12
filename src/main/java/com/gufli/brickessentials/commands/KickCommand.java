@@ -1,5 +1,8 @@
 package com.gufli.brickessentials.commands;
 
+import com.gufli.brickutils.commands.ArgumentPlayer;
+import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.translation.TranslationManager;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
@@ -11,44 +14,39 @@ import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.entity.EntityFinder;
 
-public class KickCommand extends Command {
+public class KickCommand extends CommandBase {
 
     public KickCommand() {
         super("kick");
 
         // conditions
-        setCondition((sender, commandString) -> sender instanceof ConsoleSender ||
-                sender.hasPermission("brickessentials.kick") ||
-                (sender instanceof Player p && p.getPermissionLevel() == 4));
+        setCondition("brickessentials.kick");
 
         // usage
-        setDefaultExecutor((sender, context) -> {
-            sender.sendMessage("Usage: /kick <player> <message>");
-        });
+        setInvalidUsageMessage("cmd.kick.usage");
 
         // arguments
-        ArgumentEntity player = ArgumentType.Entity("player").onlyPlayers(true);
+        ArgumentPlayer player = new ArgumentPlayer("player");
+        setInvalidArgumentMessage(player, "cmd.error.args.player");
+
         ArgumentWord message = ArgumentType.Word("message");
         message.setDefaultValue("");
-
-        setArgumentCallback((sender, exception) -> {
-            sender.sendMessage(Component.text(exception.getInput() + " is not online.")); // TODO
-        }, player);
 
         // executor
         addSyntax(this::execute, player, message);
     }
 
     private void execute(CommandSender sender, CommandContext context) {
-        Player target = ((EntityFinder) context.get("player")).findFirstPlayer(sender);
-        if ( target == null ) {
-            return;
-        }
+        Player target = context.get("player");
 
         String message = context.get("message");
-        target.kick(Component.text(message));
+        if ( message.equals("") ) {
+            target.kick(TranslationManager.get().translate(target, "cmd.kick.target"));
+        } else {
+            target.kick(Component.text(message));
+        }
 
-        sender.sendMessage(Component.text("You kicked " + target.getUsername() + " from the server.")); // TODO
+        TranslationManager.get().send(sender, "cmd.kick", target.getUsername());
     }
 
 }

@@ -1,6 +1,10 @@
 package com.gufli.brickessentials.commands;
 
+import com.gufli.brickutils.commands.ArgumentPlayer;
+import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.translation.TranslationManager;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
@@ -11,72 +15,51 @@ import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.utils.entity.EntityFinder;
 
-public class GamemodeCommand extends Command {
+public class GamemodeCommand extends CommandBase {
 
     public GamemodeCommand() {
-        super("gamemode");
+        super("gamemode", "gm");
 
         // conditions
-        CommandCondition selfcondition = (sender, cs) ->
-                sender instanceof Player p && (
-                        p.hasPermission("brickessentials.gamemode") ||
-                        p.getPermissionLevel() == 4
-                );
+        CommandCondition selfcondition = createCondition("brickessentials.gamemomde", true);
+        CommandCondition othercondition = createCondition("brickessentials.gamemode.other");
+        setConditions(selfcondition, othercondition);
 
-        CommandCondition othercondition = (sender, cs) ->
-                sender instanceof ConsoleSender ||
-                sender.hasPermission("brickessentials.gamemode.other") ||
-                (sender instanceof Player p && p.getPermissionLevel() == 4);
-
-        setCondition(((sender, cs) -> selfcondition.canUse(sender, cs)
-                || othercondition.canUse(sender, cs)));
-
-        // usage
-        setDefaultExecutor((sender, context) -> {
-            sender.sendMessage("Usage: /gamemode [player] <gamemode>");
-        });
+        // invalid usage
+        setInvalidUsageMessage("cmd.gamemode.usage");
 
         // arguments
-        ArgumentEntity player = ArgumentType.Entity("player")
-                .onlyPlayers(true).singleEntity(true);
+        ArgumentPlayer player = new ArgumentPlayer("player");
+        setInvalidArgumentMessage(player, "cmd.error.args.player");
 
-        ArgumentEnum<GameMode> mode = ArgumentType.Enum("gamemode", GameMode.class)
+        ArgumentEnum<GameMode> gamemode = ArgumentType.Enum("gamemode", GameMode.class)
                 .setFormat(ArgumentEnum.Format.LOWER_CASED);
+        setInvalidArgumentMessage(gamemode);
 
-        // invalid gamemode
-        setArgumentCallback((sender, exception) -> {
-            sender.sendMessage(exception.getInput() + " is not a valid gamemode!");
-        }, mode);
-
-        setArgumentCallback((sender, exception) -> {
-            sender.sendMessage(Component.text(exception.getInput() + " is not online.")); // TODO
-        }, player);
-
-        // self
-        addConditionalSyntax(selfcondition, this::executeOnSelf, mode);
-
-        // other
-        addConditionalSyntax(othercondition, this::executeOnOther, player, mode);
+        addConditionalSyntax(selfcondition, this::executeOnSelf, gamemode);
+        addConditionalSyntax(othercondition, this::executeOnOther, player, gamemode);
     }
 
     private void executeOnSelf(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         GameMode gamemode = context.get("gamemode");
         player.setGameMode(gamemode);
-        player.sendMessage(Component.text("Your gamemode has been changed to " + gamemode + ".")); // TODO
+        TranslationManager.get().send(sender, "cmd.gamemode", gamemode.name());
     }
 
     private void executeOnOther(CommandSender sender, CommandContext context) {
-        Player target = ((EntityFinder) context.get("player")).findFirstPlayer(sender);
-        if (target == null) {
-            return;
-        }
-
+        Player target = context.get("player");
         GameMode gamemode = context.get("gamemode");
         target.setGameMode(gamemode);
-        sender.sendMessage(Component.text("You changed the gamemode of " + target.getUsername() + " to " + gamemode + ".")); // TODO
+
+        if ( target != sender ) {
+            TranslationManager.get().send(target, "cmd.gamemode.other.target", gamemode.name());
+        }
+
+        TranslationManager.get().send(sender, "cmd.gamemode.other", target.getUsername(), gamemode.name());
     }
 
 }

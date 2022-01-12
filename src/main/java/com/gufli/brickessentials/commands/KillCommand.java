@@ -1,5 +1,8 @@
 package com.gufli.brickessentials.commands;
 
+import com.gufli.brickutils.commands.ArgumentPlayer;
+import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.translation.TranslationManager;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
@@ -11,57 +14,38 @@ import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.entity.EntityFinder;
 
-public class KillCommand extends Command {
+public class KillCommand extends CommandBase {
 
     public KillCommand() {
         super("kill");
 
         // conditions
-        CommandCondition selfcondition = (sender, cs) -> sender instanceof Player p && (
-                p.hasPermission("brickessentials.kill") ||
-                p.getPermissionLevel() == 4
-        );
-
-        CommandCondition othercondition = (sender, cs) -> sender instanceof ConsoleSender ||
-                sender.hasPermission("brickessentials.kill.other") ||
-                (sender instanceof Player p && p.getPermissionLevel() == 4);
-
-        setCondition(((sender, cs) -> selfcondition.canUse(sender, cs)
-                || othercondition.canUse(sender, cs)));
+        CommandCondition selfcondition = createCondition("brickessentials.kill", true);
+        CommandCondition othercondition = createCondition("brickessentials.kill.other");
+        setConditions(selfcondition, othercondition);
 
         // usage
-        setDefaultExecutor((sender, context) -> {
-            sender.sendMessage("Usage: /kill <player>");
-        });
+        setInvalidUsageMessage("cmd.kill.usage");
 
         // arguments
-        ArgumentEntity player = ArgumentType.Entity("player").onlyPlayers(true);
-
-        setArgumentCallback((sender, exception) -> {
-            sender.sendMessage(Component.text(exception.getInput() + " is not online.")); // TODO
-        }, player);
+        ArgumentPlayer player = new ArgumentPlayer("player");
+        setInvalidArgumentMessage(player, "cmd.error.args.player");
 
         // self
         addConditionalSyntax(selfcondition, this::executeOnSelf);
-
-        // other
         addConditionalSyntax(othercondition, this::executeOnOther, player);
     }
 
     private void executeOnSelf(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         player.kill();
-        player.sendMessage(Component.text("You killed yourself.")); // TODO
+        TranslationManager.get().send(sender, "cmd.kill");
     }
 
     private void executeOnOther(CommandSender sender, CommandContext context) {
-        Player target = ((EntityFinder) context.get("player")).findFirstPlayer(sender);
-        if (target == null) {
-            return;
-        }
-
+        Player target = context.get("player");
         target.kill();
-        sender.sendMessage(Component.text("You killed " + target.getUsername() + ".")); // TODO
+        TranslationManager.get().send(sender, "cmd.kill.other", target.getUsername());
     }
 
 }

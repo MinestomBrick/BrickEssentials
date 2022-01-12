@@ -1,23 +1,19 @@
 package com.gufli.brickessentials.commands;
 
-import net.kyori.adventure.text.Component;
+import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.translation.TranslationManager;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 
-public class RepairCommand extends Command {
+public class RepairCommand extends CommandBase {
 
     public RepairCommand() {
         super("repair");
 
         // condition
-        setCondition((sender, commandString) -> sender instanceof Player p && (
-                        p.hasPermission("brickessentials.repair") ||
-                        p.getPermissionLevel() == 4
-                )
-        );
+        setCondition("brickessentials.repair", true);
 
         // usage
         setDefaultExecutor(this::execute);
@@ -28,14 +24,14 @@ public class RepairCommand extends Command {
 
         ItemStack itemStack = player.getItemInMainHand();
         if (itemStack.isAir()) {
-            sender.sendMessage(Component.text("You need to hold an item in your main hand.")); // TODO
+            TranslationManager.get().send(sender, "cmd.error.args.itemstack");
             return;
         }
 
         itemStack = itemStack.with(b -> b.meta(mb -> mb.damage(0)));
         player.setItemInMainHand(itemStack);
 
-        sender.sendMessage(Component.text("Repaired the item in your hand.")); // TODO
+        TranslationManager.get().send(sender, "cmd.repair");
     }
 
 }

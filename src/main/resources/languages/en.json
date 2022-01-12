@@ -1,0 +1,29 @@
+{
+  "cmd.error.args": "{1} is not a valid {0}.",
+  "cmd.error.args.player": "The player {0} is not online.",
+  "cmd.error.args.itemstack": "You need to hold a valid item in your main hand.",
+
+  "cmd.gamemode.usage": "Invalid usage, try this: /gamemode <player> <gamemode>",
+  "cmd.gamemode.other": "You changed the gamemode of {0} to {1}.",
+  "cmd.gamemode.other.target": "Your gamemode has been changed to {0}.",
+  "cmd.gamemode": "You changed your gamemode to {0}",
+
+  "cmd.kick.usage": "Invalid usage, try this: /kick <player>",
+  "cmd.kick": "You kicked the {0} from the server",
+  "cmd.kick.target": "You have been kicked.",
+
+  "cmd.kill.usage": "Invalid usage, try this: /kill <player>",
+  "cmd.kill": "You killed yourself.",
+  "cmd.kill.other": "You killed {0}.",
+
+  "cmd.repair": "The item in your hand has been repaired.",
+
+  "cmd.teleport.usage": "Invalid usage, try this: /teleport <player>",
+  "cmd.teleport": "You have been teleported to {0}.",
+
+  "cmd.teleporthere.usage": "Invalid usage, try this: /teleporthere <player>",
+  "cmd.teleporthere": "You teleported {0} to your position.",
+  "cmd.teleporthere.target": "You have been teleported to {0}."
+
+
+}

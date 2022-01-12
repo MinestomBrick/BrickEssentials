@@ -1,5 +1,8 @@
 package com.gufli.brickessentials.commands;
 
+import com.gufli.brickutils.commands.ArgumentPlayer;
+import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.translation.TranslationManager;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
@@ -14,28 +17,20 @@ import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.Optional;
 
-public class TeleportHereCommand extends Command {
+public class TeleportHereCommand extends CommandBase {
 
     public TeleportHereCommand() {
         super("teleporthere", "tphere");
 
         // conditions
-        setCondition((sender, commandString) -> sender instanceof Player p && (
-                p.hasPermission("brickessentials.teleport") ||
-                p.getPermissionLevel() == 4
-        ));
+        setCondition("brickessentials.teleport", true);
 
         // usage
-        setDefaultExecutor((sender, context) -> {
-            sender.sendMessage("Usage: /teleporthere <player>");
-        });
+        setInvalidUsageMessage("cmd.teleporthere.usage");
 
         // arguments
-        ArgumentEntity player = ArgumentType.Entity("player").onlyPlayers(true);
-
-        setArgumentCallback((sender, exception) -> {
-            sender.sendMessage(Component.text(exception.getInput() + " is not online.")); // TODO
-        }, player);
+        ArgumentPlayer player = new ArgumentPlayer("player");
+        setInvalidArgumentMessage(player, "cmd.error.args.player");
 
         // executor
         addSyntax(this::execute, player);
@@ -43,14 +38,11 @@ public class TeleportHereCommand extends Command {
 
     private void execute(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
-        Player target = ((EntityFinder) context.get("player")).findFirstPlayer(sender);
-        if ( target == null ) {
-            return;
-        }
+        Player target = context.get("player");
 
         target.teleport(player.getPosition());
-        sender.sendMessage(Component.text("Teleported " + target.getUsername() + " to you.")); // TODO
-        target.sendMessage("You have been teleported to " + player.getUsername() + ".");
+        TranslationManager.get().send(sender, "cmd.teleporthere", target.getUsername());
+        TranslationManager.get().send(target, "cmd.teleporthere.target", player.getUsername());
     }
 
 }
