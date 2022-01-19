@@ -1,48 +1,57 @@
 package com.gufli.brickessentials.commands;
 
-import com.gufli.brickutils.commands.ArgumentPlayer;
-import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.commands.BrickCommand;
 import com.gufli.brickutils.translation.TranslationManager;
-import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.entity.EntityFinder;
 
-import java.util.Optional;
+import java.util.List;
 
-public class TeleportHereCommand extends CommandBase {
+public class TeleportHereCommand extends BrickCommand {
 
     public TeleportHereCommand() {
         super("teleporthere", "tphere");
 
         // conditions
-        setCondition("brickessentials.teleport", true);
+        setCondition(b -> b.permission("brickessentials.teleport").playerOnly());
+
 
         // usage
         setInvalidUsageMessage("cmd.teleporthere.usage");
 
         // arguments
-        ArgumentPlayer player = new ArgumentPlayer("player");
-        setInvalidArgumentMessage(player, "cmd.error.args.player");
+        ArgumentEntity entity = new ArgumentEntity("entity");
 
         // executor
-        addSyntax(this::execute, player);
+        addSyntax(this::execute, entity);
     }
 
     private void execute(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
-        Player target = context.get("player");
+        EntityFinder ef = context.get("entity");
+        List<Entity> entities = ef.find(sender);
+        if ( entities.isEmpty() ) {
+            TranslationManager.get().send(sender, "cmd.teleporthere.invalid");
+            return;
+        }
 
-        target.teleport(player.getPosition());
-        TranslationManager.get().send(sender, "cmd.teleporthere", target.getUsername());
-        TranslationManager.get().send(target, "cmd.teleporthere.target", player.getUsername());
+        Pos target = player.getPosition();
+        entities.forEach(ent -> ent.teleport(target));
+        entities.stream().filter(ent -> ent instanceof Player).map(ent -> (Player) ent).forEach(p ->
+                TranslationManager.get().send(p, "cmd.teleporthere.target", player.getName()));
+
+        if ( entities.size() > 1 ) {
+            TranslationManager.get().send(sender, "cmd.teleporthere.multiple", entities.size() + "");
+        } else if ( entities.get(0) instanceof Player p ) {
+            TranslationManager.get().send(sender, "cmd.teleporthere.single", p.getName());
+        } else {
+            TranslationManager.get().send(sender, "cmd.teleporthere.single", entities.get(0).getCustomName());
+        }
     }
 
 }

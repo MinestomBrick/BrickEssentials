@@ -1,32 +1,19 @@
 package com.gufli.brickessentials.commands;
 
 import com.gufli.brickutils.commands.ArgumentPlayer;
-import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.commands.BrickCommand;
 import com.gufli.brickutils.translation.TranslationManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.ConsoleSender;
-import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
-import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.ChatMessagePacket;
-import net.minestom.server.utils.entity.EntityFinder;
 
-public class GamemodeCommand extends CommandBase {
+public class GamemodeCommand extends BrickCommand {
 
     public GamemodeCommand() {
         super("gamemode", "gm");
-
-        // conditions
-        CommandCondition selfcondition = createCondition("brickessentials.gamemomde", true);
-        CommandCondition othercondition = createCondition("brickessentials.gamemode.other");
-        setConditions(selfcondition, othercondition);
 
         // invalid usage
         setInvalidUsageMessage("cmd.gamemode.usage");
@@ -39,8 +26,11 @@ public class GamemodeCommand extends CommandBase {
                 .setFormat(ArgumentEnum.Format.LOWER_CASED);
         setInvalidArgumentMessage(gamemode);
 
-        addConditionalSyntax(selfcondition, this::executeOnSelf, gamemode);
-        addConditionalSyntax(othercondition, this::executeOnOther, player, gamemode);
+        addConditionalSyntax(b -> b.permission("brickessentials.gamemode").playerOnly(),
+                this::executeOnSelf, gamemode);
+
+        addConditionalSyntax(b -> b.permission("brickessentials.gamemode.other"),
+                this::executeOnOther, player, gamemode);
     }
 
     private void executeOnSelf(CommandSender sender, CommandContext context) {
@@ -55,7 +45,7 @@ public class GamemodeCommand extends CommandBase {
         GameMode gamemode = context.get("gamemode");
         target.setGameMode(gamemode);
 
-        if ( target != sender ) {
+        if (target != sender) {
             TranslationManager.get().send(target, "cmd.gamemode.other.target", gamemode.name());
         }
 

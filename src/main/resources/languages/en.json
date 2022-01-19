@@ -1,4 +1,8 @@
 {
+  "cmd.error.permission": "You don't have permission for this command.",
+  "cmd.error.player-only": "This command can only be executed by a player.",
+  "cmd.error.console-only": "This command can only be executed by the console.",
+
   "cmd.error.args": "{1} is not a valid {0}.",
   "cmd.error.args.player": "The player {0} is not online.",
   "cmd.error.args.itemstack": "You need to hold a valid item in your main hand.",
@@ -13,17 +17,19 @@
   "cmd.kick.target": "You have been kicked.",
 
   "cmd.kill.usage": "Invalid usage, try this: /kill <player>",
-  "cmd.kill": "You killed yourself.",
-  "cmd.kill.other": "You killed {0}.",
+  "cmd.kill.invalid": "No entities were found for the given query.",
+  "cmd.kill.multiple": "{0} entities were killed.",
+  "cmd.kill.single": "You killed {0}.",
 
   "cmd.repair": "The item in your hand has been repaired.",
 
   "cmd.teleport.usage": "Invalid usage, try this: /teleport <player>",
+  "cmd.teleport.invalid": "No entity was found for the given query.",
   "cmd.teleport": "You have been teleported to {0}.",
 
   "cmd.teleporthere.usage": "Invalid usage, try this: /teleporthere <player>",
-  "cmd.teleporthere": "You teleported {0} to your position.",
+  "cmd.teleporthere.invalid": "No entities were found for the given query.",
+  "cmd.teleporthere.multiple": "{0} entities have been teleported to your position.",
+  "cmd.teleporthere.single": "{0} has been teleported to your position.",
   "cmd.teleporthere.target": "You have been teleported to {0}."
-
-
 }

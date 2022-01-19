@@ -1,51 +1,55 @@
 package com.gufli.brickessentials.commands;
 
-import com.gufli.brickutils.commands.ArgumentPlayer;
-import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.commands.BrickCommand;
 import com.gufli.brickutils.translation.TranslationManager;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.ConsoleSender;
-import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
-import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.entity.EntityFinder;
 
-public class KillCommand extends CommandBase {
+import java.util.List;
+
+public class KillCommand extends BrickCommand {
 
     public KillCommand() {
         super("kill");
-
-        // conditions
-        CommandCondition selfcondition = createCondition("brickessentials.kill", true);
-        CommandCondition othercondition = createCondition("brickessentials.kill.other");
-        setConditions(selfcondition, othercondition);
 
         // usage
         setInvalidUsageMessage("cmd.kill.usage");
 
         // arguments
-        ArgumentPlayer player = new ArgumentPlayer("player");
-        setInvalidArgumentMessage(player, "cmd.error.args.player");
+        ArgumentEntity entity = new ArgumentEntity("entity");
 
         // self
-        addConditionalSyntax(selfcondition, this::executeOnSelf);
-        addConditionalSyntax(othercondition, this::executeOnOther, player);
+        addConditionalSyntax(b -> b.permission("brickessentials.kill"),
+                this::execute, entity);
     }
 
-    private void executeOnSelf(CommandSender sender, CommandContext context) {
-        Player player = (Player) sender;
-        player.kill();
-        TranslationManager.get().send(sender, "cmd.kill");
-    }
+    private void execute(CommandSender sender, CommandContext context) {
+        EntityFinder ef = context.get("entity");
+        List<Entity> entities = ef.find(sender);
+        if (entities.isEmpty()) {
+            TranslationManager.get().send(sender, "cmd.kill.invalid");
+            return;
+        }
 
-    private void executeOnOther(CommandSender sender, CommandContext context) {
-        Player target = context.get("player");
-        target.kill();
-        TranslationManager.get().send(sender, "cmd.kill.other", target.getUsername());
+        entities.forEach(ent -> {
+            if (ent instanceof Player p) {
+                p.kill();
+            } else {
+                ent.remove();
+            }
+        });
+
+        if (entities.size() > 1) {
+            TranslationManager.get().send(sender, "cmd.kill.multiple", entities.size() + "");
+        } else if ( entities.get(0) instanceof Player p ){
+            TranslationManager.get().send(sender, "cmd.kill.single", p.getName());
+        } else {
+            TranslationManager.get().send(sender, "cmd.kill.single", entities.get(0).getEntityType().name());
+        }
     }
 
 }

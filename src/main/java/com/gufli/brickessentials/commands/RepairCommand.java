@@ -1,19 +1,19 @@
 package com.gufli.brickessentials.commands;
 
-import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.commands.BrickCommand;
 import com.gufli.brickutils.translation.TranslationManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 
-public class RepairCommand extends CommandBase {
+public class RepairCommand extends BrickCommand {
 
     public RepairCommand() {
         super("repair");
 
         // condition
-        setCondition("brickessentials.repair", true);
+        setCondition(b -> b.permission("brickessentials.repair").playerOnly());
 
         // usage
         setDefaultExecutor(this::execute);

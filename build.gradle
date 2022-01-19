@@ -16,13 +16,15 @@ repositories {
     mavenCentral()
     maven { url 'https://repo.spongepowered.org/maven' }
     maven { url 'https://jitpack.io' }
+
+    maven { url "https://repo.jorisg.com/snapshots" }
 }
 
 dependencies {
     compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
 
-    implementation 'com.github.MinestomBrick.BrickUtils:translation:main-SNAPSHOT'
-    implementation 'com.github.MinestomBrick.BrickUtils:commands:main-SNAPSHOT'
+    implementation 'com.gufli.brickutils:translation:1.0-SNAPSHOT'
+    implementation 'com.gufli.brickutils:commands:1.0-SNAPSHOT'
 }
 
 shadowJar {

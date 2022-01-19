@@ -1,26 +1,22 @@
 package com.gufli.brickessentials.commands;
 
 import com.gufli.brickutils.commands.ArgumentPlayer;
-import com.gufli.brickutils.commands.CommandBase;
+import com.gufli.brickutils.commands.BrickCommand;
 import com.gufli.brickutils.translation.TranslationManager;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.ConsoleSender;
-import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.entity.EntityFinder;
 
-public class KickCommand extends CommandBase {
+public class KickCommand extends BrickCommand {
 
     public KickCommand() {
         super("kick");
 
         // conditions
-        setCondition("brickessentials.kick");
+        setCondition(b -> b.permission("brickessentials.kick", "cmd.error.permission"));
 
         // usage
         setInvalidUsageMessage("cmd.kick.usage");
@@ -40,7 +36,7 @@ public class KickCommand extends CommandBase {
         Player target = context.get("player");
 
         String message = context.get("message");
-        if ( message.equals("") ) {
+        if (message.equals("")) {
             target.kick(TranslationManager.get().translate(target, "cmd.kick.target"));
         } else {
             target.kick(Component.text(message));
