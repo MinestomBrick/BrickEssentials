@@ -5,9 +5,13 @@ import com.gufli.brickutils.translation.TranslationManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.entity.EntityFinder;
+import net.minestom.server.utils.location.RelativeVec;
 
 public class TeleportCommand extends BrickCommand {
 
@@ -24,11 +28,14 @@ public class TeleportCommand extends BrickCommand {
         ArgumentEntity entity = new ArgumentEntity("entity")
                 .singleEntity(true);
 
+        ArgumentRelativeBlockPosition block = new ArgumentRelativeBlockPosition("position");
+
         // executor
-        addSyntax(this::execute, entity);
+        addSyntax(this::executeEntity, entity);
+        addSyntax(this::executePos, block);
     }
 
-    private void execute(CommandSender sender, CommandContext context) {
+    private void executeEntity(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         EntityFinder ef = context.get("entity");
         Entity entity = ef.findFirstEntity(sender);
@@ -39,6 +46,15 @@ public class TeleportCommand extends BrickCommand {
 
         player.teleport(entity.getPosition());
         TranslationManager.get().send(sender, "cmd.teleport", entity.getCustomName());
+    }
+
+    private void executePos(CommandSender sender, CommandContext context) {
+        Player player = (Player) sender;
+        RelativeVec vec = context.get("position");
+
+        Vec target = vec.from(player);
+        player.teleport(new Pos(target.x(), target.y(), target.z()));
+        TranslationManager.get().send(sender, "cmd.teleport", target);
     }
 
 }
