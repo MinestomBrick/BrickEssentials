@@ -27,6 +27,8 @@ public class BrickEssentials extends Extension {
         commandManager.register(new RepairCommand());
         commandManager.register(new KillCommand());
         commandManager.register(new KickCommand());
+        commandManager.register(new TimeCommand());
+        commandManager.register(new TimeSpeedCommand());
 
         // register events
         new VehicleListener();
