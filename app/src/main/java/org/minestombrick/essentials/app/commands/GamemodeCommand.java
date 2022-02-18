@@ -1,14 +1,14 @@
-package com.gufli.brickessentials.commands;
+package org.minestombrick.essentials.app.commands;
 
 import com.gufli.brickutils.commands.ArgumentPlayer;
 import com.gufli.brickutils.commands.BrickCommand;
-import com.gufli.brickutils.translation.TranslationManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import org.minestombrick.i18n.api.translation.I18nAPI;
 
 public class GamemodeCommand extends BrickCommand {
 
@@ -37,7 +37,7 @@ public class GamemodeCommand extends BrickCommand {
         Player player = (Player) sender;
         GameMode gamemode = context.get("gamemode");
         player.setGameMode(gamemode);
-        TranslationManager.get().send(sender, "cmd.gamemode", gamemode.name());
+        I18nAPI.get(this).send(sender, "cmd.gamemode", gamemode.name());
     }
 
     private void executeOnOther(CommandSender sender, CommandContext context) {
@@ -46,10 +46,10 @@ public class GamemodeCommand extends BrickCommand {
         target.setGameMode(gamemode);
 
         if (target != sender) {
-            TranslationManager.get().send(target, "cmd.gamemode.other.target", gamemode.name());
+            I18nAPI.get(this).send(target, "cmd.gamemode.other.target", gamemode.name());
         }
 
-        TranslationManager.get().send(sender, "cmd.gamemode.other", target.getUsername(), gamemode.name());
+        I18nAPI.get(this).send(sender, "cmd.gamemode.other", target.getUsername(), gamemode.name());
     }
 
 }

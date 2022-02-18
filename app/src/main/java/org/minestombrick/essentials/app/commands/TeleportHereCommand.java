@@ -1,7 +1,7 @@
-package com.gufli.brickessentials.commands;
+package org.minestombrick.essentials.app.commands;
 
 import com.gufli.brickutils.commands.BrickCommand;
-import com.gufli.brickutils.translation.TranslationManager;
+import org.minestombrick.i18n.api.translation.I18nAPI;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
@@ -36,21 +36,21 @@ public class TeleportHereCommand extends BrickCommand {
         EntityFinder ef = context.get("entity");
         List<Entity> entities = ef.find(sender);
         if ( entities.isEmpty() ) {
-            TranslationManager.get().send(sender, "cmd.teleporthere.invalid");
+            I18nAPI.get(this).send(sender, "cmd.teleporthere.invalid");
             return;
         }
 
         Pos target = player.getPosition();
         entities.forEach(ent -> ent.teleport(target));
         entities.stream().filter(ent -> ent instanceof Player).map(ent -> (Player) ent).forEach(p ->
-                TranslationManager.get().send(p, "cmd.teleporthere.target", player.getName()));
+                I18nAPI.get(this).send(p, "cmd.teleporthere.target", player.getName()));
 
         if ( entities.size() > 1 ) {
-            TranslationManager.get().send(sender, "cmd.teleporthere.multiple", entities.size() + "");
+            I18nAPI.get(this).send(sender, "cmd.teleporthere.multiple", entities.size() + "");
         } else if ( entities.get(0) instanceof Player p ) {
-            TranslationManager.get().send(sender, "cmd.teleporthere.single", p.getName());
+            I18nAPI.get(this).send(sender, "cmd.teleporthere.single", p.getName());
         } else {
-            TranslationManager.get().send(sender, "cmd.teleporthere.single", entities.get(0).getCustomName());
+            I18nAPI.get(this).send(sender, "cmd.teleporthere.single", entities.get(0).getCustomName());
         }
     }
 

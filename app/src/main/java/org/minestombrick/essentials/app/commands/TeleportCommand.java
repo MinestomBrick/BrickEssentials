@@ -1,7 +1,7 @@
-package com.gufli.brickessentials.commands;
+package org.minestombrick.essentials.app.commands;
 
 import com.gufli.brickutils.commands.BrickCommand;
-import com.gufli.brickutils.translation.TranslationManager;
+import org.minestombrick.i18n.api.translation.I18nAPI;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
@@ -40,12 +40,12 @@ public class TeleportCommand extends BrickCommand {
         EntityFinder ef = context.get("entity");
         Entity entity = ef.findFirstEntity(sender);
         if ( entity == null ) {
-            TranslationManager.get().send(sender, "cmd.teleport.invalid");
+            I18nAPI.get(this).send(sender, "cmd.teleport.invalid");
             return;
         }
 
         player.teleport(entity.getPosition());
-        TranslationManager.get().send(sender, "cmd.teleport", entity.getCustomName());
+        I18nAPI.get(this).send(sender, "cmd.teleport", entity.getCustomName());
     }
 
     private void executePos(CommandSender sender, CommandContext context) {
@@ -54,7 +54,7 @@ public class TeleportCommand extends BrickCommand {
 
         Vec target = vec.from(player);
         player.teleport(new Pos(target.x(), target.y(), target.z()));
-        TranslationManager.get().send(sender, "cmd.teleport", target);
+        I18nAPI.get(this).send(sender, "cmd.teleport", target);
     }
 
 }

@@ -1,7 +1,7 @@
-package com.gufli.brickessentials.commands;
+package org.minestombrick.essentials.app.commands;
 
 import com.gufli.brickutils.commands.BrickCommand;
-import com.gufli.brickutils.translation.TranslationManager;
+import org.minestombrick.i18n.api.translation.I18nAPI;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
@@ -31,7 +31,7 @@ public class KillCommand extends BrickCommand {
         EntityFinder ef = context.get("entity");
         List<Entity> entities = ef.find(sender);
         if (entities.isEmpty()) {
-            TranslationManager.get().send(sender, "cmd.kill.invalid");
+            I18nAPI.get(this).send(sender, "cmd.kill.invalid");
             return;
         }
 
@@ -44,11 +44,11 @@ public class KillCommand extends BrickCommand {
         });
 
         if (entities.size() > 1) {
-            TranslationManager.get().send(sender, "cmd.kill.multiple", entities.size() + "");
+            I18nAPI.get(this).send(sender, "cmd.kill.multiple", entities.size() + "");
         } else if ( entities.get(0) instanceof Player p ){
-            TranslationManager.get().send(sender, "cmd.kill.single", p.getName());
+            I18nAPI.get(this).send(sender, "cmd.kill.single", p.getName());
         } else {
-            TranslationManager.get().send(sender, "cmd.kill.single", entities.get(0).getEntityType().name());
+            I18nAPI.get(this).send(sender, "cmd.kill.single", entities.get(0).getEntityType().name());
         }
     }
 

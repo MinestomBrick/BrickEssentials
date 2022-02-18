@@ -1,14 +1,14 @@
-package com.gufli.brickessentials.commands;
+package org.minestombrick.essentials.app.commands;
 
 import com.gufli.brickutils.commands.ArgumentPlayer;
 import com.gufli.brickutils.commands.BrickCommand;
-import com.gufli.brickutils.translation.TranslationManager;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.entity.Player;
+import org.minestombrick.i18n.api.translation.I18nAPI;
 
 public class KickCommand extends BrickCommand {
 
@@ -37,12 +37,12 @@ public class KickCommand extends BrickCommand {
 
         String message = context.get("message");
         if (message.equals("")) {
-            target.kick(TranslationManager.get().translate(target, "cmd.kick.target"));
+            target.kick(I18nAPI.get(this).translate(target, "cmd.kick.target"));
         } else {
             target.kick(Component.text(message));
         }
 
-        TranslationManager.get().send(sender, "cmd.kick", target.getUsername());
+        I18nAPI.get(this).send(sender, "cmd.kick", target.getUsername());
     }
 
 }

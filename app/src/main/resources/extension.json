@@ -1,0 +1,8 @@
+{
+  "entrypoint": "org.minestombrick.essentials.app.BrickEssentials",
+  "name": "BrickEssentials",
+  "version": "1.0.0",
+  "dependencies": [
+    "BrickI18n"
+  ]
+}

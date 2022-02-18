@@ -1,12 +1,13 @@
-package com.gufli.brickessentials;
+package org.minestombrick.essentials.app;
 
-import com.gufli.brickessentials.commands.*;
-import com.gufli.brickessentials.listeners.VehicleListener;
-import com.gufli.brickessentials.listeners.SpawnEggListener;
-import com.gufli.brickutils.translation.SimpleTranslationManager;
+import org.minestombrick.essentials.app.commands.*;
+import org.minestombrick.essentials.app.listeners.SpawnEggListener;
+import org.minestombrick.essentials.app.listeners.VehicleListener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.extensions.Extension;
+import org.minestombrick.i18n.api.translation.I18nAPI;
+import org.minestombrick.i18n.api.translation.namespace.I18nNamespace;
 
 import java.util.Locale;
 
@@ -16,8 +17,9 @@ public class BrickEssentials extends Extension {
     public void initialize() {
         getLogger().info("Enabling " + nameAndVersion() + ".");
 
-        SimpleTranslationManager tm = new SimpleTranslationManager(this, Locale.ENGLISH);
-        tm.loadTranslations(this, "languages");
+        I18nNamespace namespace = new I18nNamespace(this, Locale.ENGLISH);
+        namespace.loadValues(this, "languages");
+        I18nAPI.get().register(namespace);
 
         // register commands
         CommandManager commandManager = MinecraftServer.getCommandManager();

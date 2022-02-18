@@ -1,4 +1,4 @@
-package com.gufli.brickessentials.listeners;
+package org.minestombrick.essentials.app.listeners;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;

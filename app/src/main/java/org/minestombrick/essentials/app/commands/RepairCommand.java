@@ -1,7 +1,7 @@
-package com.gufli.brickessentials.commands;
+package org.minestombrick.essentials.app.commands;
 
 import com.gufli.brickutils.commands.BrickCommand;
-import com.gufli.brickutils.translation.TranslationManager;
+import org.minestombrick.i18n.api.translation.I18nAPI;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.entity.Player;
@@ -24,14 +24,14 @@ public class RepairCommand extends BrickCommand {
 
         ItemStack itemStack = player.getItemInMainHand();
         if (itemStack.isAir()) {
-            TranslationManager.get().send(sender, "cmd.error.args.itemstack");
+            I18nAPI.get(this).send(sender, "cmd.error.args.itemstack");
             return;
         }
 
         itemStack = itemStack.with(b -> b.meta(mb -> mb.damage(0)));
         player.setItemInMainHand(itemStack);
 
-        TranslationManager.get().send(sender, "cmd.repair");
+        I18nAPI.get(this).send(sender, "cmd.repair");
     }
 
 }

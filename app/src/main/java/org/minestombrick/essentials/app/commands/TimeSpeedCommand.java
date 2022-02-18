@@ -1,10 +1,11 @@
-package com.gufli.brickessentials.commands;
+package org.minestombrick.essentials.app.commands;
 
 import com.gufli.brickutils.commands.BrickCommand;
-import com.gufli.brickutils.translation.TranslationAPI;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
+import org.minestombrick.i18n.api.translation.I18nAPI;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -25,9 +26,17 @@ public class TimeSpeedCommand extends BrickCommand {
 
         addSyntax((sender, context) -> {
             int speed = context.get(timeSpeedArg);
-            ((Player) sender).getInstance().setTimeRate(speed);
-            ((Player) sender).getInstance().setTimeUpdate(Duration.of((int) (1000 * (1f / speed)), ChronoUnit.MILLIS));
-            TranslationAPI.get().send(sender, "cmd.timespeed", speed);
+            Instance instance = ((Player) sender).getInstance();
+
+            instance.setTimeRate(speed);
+
+            if ( speed == 0 ) {
+                instance.setTimeUpdate(Duration.of(1, ChronoUnit.CENTURIES));
+            } else {
+                instance.setTimeUpdate(Duration.of((int) (1000 * (1f / speed)), ChronoUnit.MILLIS));
+            }
+
+            I18nAPI.get(this).send(sender, "cmd.timespeed", speed);
         }, timeSpeedArg);
 
     }

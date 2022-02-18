@@ -1,1 +1,3 @@
 rootProject.name = 'BrickEssentials'
+
+include 'app'

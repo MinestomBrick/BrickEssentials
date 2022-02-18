@@ -1,39 +1,33 @@
 plugins {
     id 'java'
-    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
-group 'com.gufli.brickessentials'
+group 'org.minestombrick.essentials'
 version '1.0-SNAPSHOT'
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'com.gufli.brickessentials.BrickEssentials'
+compileJava {
+    sourceCompatibility = 1.17
+    targetCompatibility = 1.17
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.17
+    targetCompatibility = 1.17
+
+    group = parent.group;
+    version = parent.version;
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
     }
-}
 
-repositories {
-    mavenCentral()
-    maven { url 'https://repo.spongepowered.org/maven' }
-    maven { url 'https://jitpack.io' }
+    repositories {
+        mavenCentral()
 
-    maven { url "https://repo.jorisg.com/snapshots" }
-}
-
-dependencies {
-    compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
-
-    implementation 'com.gufli.brickutils:translation:1.0-SNAPSHOT'
-    implementation 'com.gufli.brickutils:commands:1.0-SNAPSHOT'
-}
-
-shadowJar {
-    archiveClassifier.set("")
-
-    doLast {
-        copy {
-            from "build/libs/" + archiveFileName.get()
-            into "../server/extensions"
-        }
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://repo.spongepowered.org/maven' }
+        maven { url "https://repo.jorisg.com/snapshots" }
     }
 }
