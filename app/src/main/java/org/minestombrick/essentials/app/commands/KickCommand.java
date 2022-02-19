@@ -1,7 +1,7 @@
 package org.minestombrick.essentials.app.commands;
 
-import com.gufli.brickutils.commands.ArgumentPlayer;
-import com.gufli.brickutils.commands.BrickCommand;
+import org.minestombrick.commandtools.api.arguments.ArgumentPlayer;
+import org.minestombrick.commandtools.api.command.BrickCommand;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;

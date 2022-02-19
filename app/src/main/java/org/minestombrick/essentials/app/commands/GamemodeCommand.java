@@ -1,13 +1,13 @@
 package org.minestombrick.essentials.app.commands;
 
-import com.gufli.brickutils.commands.ArgumentPlayer;
-import com.gufli.brickutils.commands.BrickCommand;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import org.minestombrick.commandtools.api.arguments.ArgumentPlayer;
+import org.minestombrick.commandtools.api.command.BrickCommand;
 import org.minestombrick.i18n.api.I18nAPI;
 
 public class GamemodeCommand extends BrickCommand {

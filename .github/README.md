@@ -7,7 +7,6 @@ An extension for [Minestom](https://github.com/Minestom/Minestom) with useful co
 Get the latest jar file from [Github actions](https://github.com/MinestomBrick/BrickWorlds/actions) 
 and place it in the extension folder of your minestom server.
 
-
 ## Commands
 
 | Command                              | Permission                     |

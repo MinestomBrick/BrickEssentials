@@ -1,6 +1,6 @@
 package org.minestombrick.essentials.app.commands;
 
-import com.gufli.brickutils.commands.BrickCommand;
+import org.minestombrick.commandtools.api.command.BrickCommand;
 import org.minestombrick.i18n.api.I18nAPI;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;

@@ -1,6 +1,6 @@
 package org.minestombrick.essentials.app.commands;
 
-import com.gufli.brickutils.commands.BrickCommand;
+import org.minestombrick.commandtools.api.command.BrickCommand;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
