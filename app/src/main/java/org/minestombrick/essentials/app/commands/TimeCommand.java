@@ -5,7 +5,7 @@ import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.entity.Player;
-import org.minestombrick.i18n.api.translation.I18nAPI;
+import org.minestombrick.i18n.api.I18nAPI;
 
 public class TimeCommand extends BrickCommand {
 

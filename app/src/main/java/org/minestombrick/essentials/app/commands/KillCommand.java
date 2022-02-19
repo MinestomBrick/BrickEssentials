@@ -1,7 +1,7 @@
 package org.minestombrick.essentials.app.commands;
 
 import com.gufli.brickutils.commands.BrickCommand;
-import org.minestombrick.i18n.api.translation.I18nAPI;
+import org.minestombrick.i18n.api.I18nAPI;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;

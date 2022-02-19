@@ -8,7 +8,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.entity.Player;
-import org.minestombrick.i18n.api.translation.I18nAPI;
+import org.minestombrick.i18n.api.I18nAPI;
 
 public class KickCommand extends BrickCommand {
 

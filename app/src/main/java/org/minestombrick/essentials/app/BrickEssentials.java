@@ -6,8 +6,8 @@ import org.minestombrick.essentials.app.listeners.VehicleListener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.extensions.Extension;
-import org.minestombrick.i18n.api.translation.I18nAPI;
-import org.minestombrick.i18n.api.translation.namespace.I18nNamespace;
+import org.minestombrick.i18n.api.I18nAPI;
+import org.minestombrick.i18n.api.namespace.I18nNamespace;
 
 import java.util.Locale;
 
