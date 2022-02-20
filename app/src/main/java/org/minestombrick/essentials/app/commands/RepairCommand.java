@@ -13,7 +13,7 @@ public class RepairCommand extends BrickCommand {
         super("repair");
 
         // condition
-        setCondition(b -> b.permission("brickessentials.repair").playerOnly());
+        setCondition(b -> b.permission("brick.essentials.repair").playerOnly());
 
         // usage
         setDefaultExecutor(this::execute);

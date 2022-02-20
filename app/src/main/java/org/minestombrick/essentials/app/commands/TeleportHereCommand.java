@@ -18,7 +18,7 @@ public class TeleportHereCommand extends BrickCommand {
         super("teleporthere", "tphere");
 
         // conditions
-        setCondition(b -> b.permission("brickessentials.teleport").playerOnly());
+        setCondition(b -> b.permission("brick.essentials.teleport").playerOnly());
 
 
         // usage

@@ -16,7 +16,7 @@ public class KickCommand extends BrickCommand {
         super("kick");
 
         // conditions
-        setCondition(b -> b.permission("brickessentials.kick", "cmd.error.permission"));
+        setCondition(b -> b.permission("brick.essentials.kick", "cmd.error.permission"));
 
         // usage
         setInvalidUsageMessage("cmd.kick.usage");

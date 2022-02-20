@@ -16,6 +16,8 @@ public class KillCommand extends BrickCommand {
     public KillCommand() {
         super("kill");
 
+        setCondition(b -> b.permission("brick.essentials.kill"));
+
         // usage
         setInvalidUsageMessage("cmd.kill.usage");
 
@@ -23,8 +25,7 @@ public class KillCommand extends BrickCommand {
         ArgumentEntity entity = new ArgumentEntity("entity");
 
         // self
-        addConditionalSyntax(b -> b.permission("brickessentials.kill"),
-                this::execute, entity);
+        addSyntax(this::execute, entity);
     }
 
     private void execute(CommandSender sender, CommandContext context) {

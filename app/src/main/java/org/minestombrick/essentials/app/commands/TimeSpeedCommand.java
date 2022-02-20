@@ -15,7 +15,7 @@ public class TimeSpeedCommand extends BrickCommand {
     public TimeSpeedCommand() {
         super("timespeed");
 
-        setCondition(b -> b.permission("brickessentials.timespeed"));
+        setCondition(b -> b.permission("brick.essentials.timespeed"));
 
         // invalid usage
         setInvalidUsageMessage("cmd.timecycle.usage");

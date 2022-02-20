@@ -4,5 +4,16 @@
   "version": "1.0.0",
   "dependencies": [
     "BrickI18n"
-  ]
+  ],
+  "externalDependencies": {
+    "repositories": [
+      {
+        "name": "jorisg",
+        "url": "https://repo.jorisg.com/snapshots"
+      }
+    ],
+    "artifacts": [
+      "org.minestombrick.commandtools:api:1.0-SNAPSHOT"
+    ]
+  }
 }

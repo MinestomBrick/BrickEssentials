@@ -15,6 +15,8 @@ public class GamemodeCommand extends BrickCommand {
     public GamemodeCommand() {
         super("gamemode", "gm");
 
+        setupDefaultCondition();
+
         // invalid usage
         setInvalidUsageMessage("cmd.gamemode.usage");
 
@@ -26,10 +28,10 @@ public class GamemodeCommand extends BrickCommand {
                 .setFormat(ArgumentEnum.Format.LOWER_CASED);
         setInvalidArgumentMessage(gamemode);
 
-        addConditionalSyntax(b -> b.permission("brickessentials.gamemode").playerOnly(),
+        addConditionalSyntax(b -> b.permission("brick.essentials.gamemode").playerOnly(),
                 this::executeOnSelf, gamemode);
 
-        addConditionalSyntax(b -> b.permission("brickessentials.gamemode.other"),
+        addConditionalSyntax(b -> b.permission("brick.essentials.gamemode.other"),
                 this::executeOnOther, player, gamemode);
     }
 

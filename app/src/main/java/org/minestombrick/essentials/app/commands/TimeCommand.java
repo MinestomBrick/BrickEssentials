@@ -12,7 +12,7 @@ public class TimeCommand extends BrickCommand {
     public TimeCommand() {
         super("time");
 
-        setCondition(b -> b.permission("brickessentials.time"));
+        setCondition(b -> b.permission("brick.essentials.time"));
 
         // invalid usage
         setInvalidUsageMessage("cmd.time.usage");
