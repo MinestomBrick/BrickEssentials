@@ -4,8 +4,12 @@ An extension for [Minestom](https://github.com/Minestom/Minestom) with useful co
 
 ## Install
 
-Get the latest jar file from [Github actions](https://github.com/MinestomBrick/BrickWorlds/actions) 
+Get the [release](https://github.com/MinestomBrick/BrickEssentials/releases)
 and place it in the extension folder of your minestom server.
+
+### Dependencies
+* [BrickI18n](https://github.com/MinestomBrick/BrickI18n)
+
 
 ## Commands
 
