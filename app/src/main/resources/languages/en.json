@@ -1,43 +1,32 @@
 {
-  "cmd.error.permission": "You don't have permission for this command.",
-  "cmd.error.player-only": "This command can only be executed by a player.",
-  "cmd.error.console-only": "This command can only be executed by the console.",
+  "cmd.error.args.itemstack": "<red>You need to hold a valid item in your main hand.",
+  "cmd.error.args.time": "<red>Invalid time.",
 
-  "cmd.error.args": "{1} is not a valid {0}.",
-  "cmd.error.args.player": "The player {0} is not online.",
-  "cmd.error.args.itemstack": "You need to hold a valid item in your main hand.",
-  "cmd.error.args.time": "Invalid time.",
-  "cmd.error.args.number": "Invalid number.",
-
-  "cmd.gamemode.usage": "Invalid usage, try this: /gamemode <player> <gamemode>",
+  "cmd.gamemode.usage": "<red>Invalid usage, try this: <dark_red>/gamemode <player> <gamemode>",
   "cmd.gamemode.other": "You changed the gamemode of {0} to {1}.",
   "cmd.gamemode.other.target": "Your gamemode has been changed to {0}.",
   "cmd.gamemode": "You changed your gamemode to {0}",
 
-  "cmd.kick.usage": "Invalid usage, try this: /kick <player>",
+  "cmd.kick.usage": "<red>Invalid usage, try this: <dark_red>/kick <player>",
   "cmd.kick": "You kicked the {0} from the server",
   "cmd.kick.target": "You have been kicked.",
 
-  "cmd.kill.usage": "Invalid usage, try this: /kill <player>",
-  "cmd.kill.invalid": "No entities were found for the given query.",
+  "cmd.kill.usage": "<red>Invalid usage, try this: <dark_red>/kill <player>",
+  "cmd.kill.invalid": "<red>No entities were found for the given query.",
   "cmd.kill.multiple": "{0} entities were killed.",
   "cmd.kill.single": "You killed {0}.",
 
   "cmd.repair": "The item in your hand has been repaired.",
 
-  "cmd.teleport.usage": "Invalid usage, try this: /teleport <player>",
-  "cmd.teleport.invalid": "No entity was found for the given query.",
+  "cmd.teleport.usage": "<red>Invalid usage, try this: <dark_red>/teleport <player>",
+  "cmd.teleport.invalid": "<red>No entities were found for the given query.",
   "cmd.teleport": "You have been teleported to {0}.",
+  "cmd.teleport.other.single": "You teleported {0} to {1}.",
+  "cmd.teleport.other.multiple": "You teleported {0} entities to {1}.",
 
-  "cmd.teleporthere.usage": "Invalid usage, try this: /teleporthere <player>",
-  "cmd.teleporthere.invalid": "No entities were found for the given query.",
-  "cmd.teleporthere.multiple": "{0} entities have been teleported to your position.",
-  "cmd.teleporthere.single": "{0} has been teleported to your position.",
-  "cmd.teleporthere.target": "You have been teleported to {0}.",
-
-  "cmd.time.usage": "Invalid usage, try this: /time [sunrise|noon|dawn|midnight]",
+  "cmd.time.usage": "<red>Invalid usage, try this: <dark_red>/time [sunrise|noon|dawn|midnight]",
   "cmd.time": "Changed the time to {0}.",
 
-  "cmd.timespeed.usage": "Invalid usage, try this: /timespeed <speed>",
+  "cmd.timespeed.usage": "<red>Invalid usage, try this: <dark_red>/timespeed <speed>",
   "cmd.timespeed": "Changed the time update speed to {0}."
 }

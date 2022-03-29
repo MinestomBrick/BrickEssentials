@@ -49,7 +49,7 @@ public class KillCommand extends BrickCommand {
         } else if ( entities.get(0) instanceof Player p ){
             I18nAPI.get(this).send(sender, "cmd.kill.single", p.getName());
         } else {
-            I18nAPI.get(this).send(sender, "cmd.kill.single", entities.get(0).getEntityType().name());
+            I18nAPI.get(this).send(sender, "cmd.kill.single", entities.get(0).getEntityType().name().substring(10));
         }
     }
 

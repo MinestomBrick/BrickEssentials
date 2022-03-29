@@ -25,7 +25,6 @@ public class BrickEssentials extends Extension {
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new GamemodeCommand());
         commandManager.register(new TeleportCommand());
-        commandManager.register(new TeleportHereCommand());
         commandManager.register(new RepairCommand());
         commandManager.register(new KillCommand());
         commandManager.register(new KickCommand());
